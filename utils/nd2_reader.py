@@ -2,7 +2,6 @@
 
 from math import floor
 import numpy as np
-import nd2reader
 import matplotlib.pyplot as plt
 from  matplotlib import colors
 from pims import ND2_Reader
@@ -54,14 +53,12 @@ def visualize_fused_images(original_image, image_after_preprocess, images):
             ax.imshow(images[int(i / 3)], cmap='Greys')
     plt.show()
 
-def fuse_in_time_series_by_channel_and_z_axis(images):
+def fuse_in_time_series_by_z_axis(images):
     shape = list(images.shape)
     shape[2] = 1
-    imagesResult = np.zeros(shape=shape)
+    fused = np.zeros(shape=shape)
     for channel in range(shape[0]):
         for timeIndex in range(shape[1]):
-            imagesResult[channel, timeIndex] = np.amax(images[channel, timeIndex], axis=0)
-    shape[0] = 1
-    fused = np.amax(imagesResult, axis=0).reshape(shape)
-    fused.resize([shape[1], shape[3], shape[4]])
+            fused[channel, timeIndex] = np.amax(images[channel, timeIndex], axis=0)
+    fused.resize((shape[0], shape[1], shape[3], shape[4]))
     return fused

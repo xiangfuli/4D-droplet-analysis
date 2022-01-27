@@ -12,10 +12,9 @@ def spot_droplet_via_fft(image):
     f_ishift = np.fft.ifftshift(fshift)
     img_back = np.fft.ifft2(f_ishift)
     img_back = np.real(img_back)
-
     return img_back
 
-def gooup_by(thresholding_imgs, x_offset, y_offset):
+def group_by(thresholding_imgs, x_offset, y_offset):
     groups = []
 
     for row_index, row in enumerate(thresholding_imgs):
@@ -43,5 +42,5 @@ def gooup_by(thresholding_imgs, x_offset, y_offset):
 
 def marginalize(image):
     # in each image, find the most bright pixels whose value is greater than fix value - 10000
-    bw_image  = cv.threshold(image, 10000, 65535, cv.THRESH_BINARY)[1]
+    bw_image  = cv.threshold(image, np.mean(np.sort(image.flatten())[-200:]), 65535, cv.THRESH_BINARY)[1]
     return bw_image
