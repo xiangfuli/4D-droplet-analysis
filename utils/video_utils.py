@@ -1,13 +1,13 @@
 import skvideo.io
 import numpy as np
 
-def output_analysis_video(path, original_images, images_after_preprocessed, droplet_spotting_images, channel_fused=False):
+def output_analysis_video(path, original_images, images_after_fft, images_after_preprocessed, droplet_spotting_images, channel_fused=False):
     # check if all images have the same shape
-    assert original_images.shape == images_after_preprocessed.shape and original_images.shape == droplet_spotting_images.shape
+    assert original_images.shape == images_after_preprocessed.shape and original_images.shape == images_after_fft.shape and original_images.shape == droplet_spotting_images.shape
    
-    output_images = np.append(
-        np.append(original_images, images_after_preprocessed, axis = 3),
-        droplet_spotting_images, axis = 3)
+    output_images = np.append(np.append(
+        np.append(original_images, images_after_fft, axis = 3),
+        images_after_preprocessed, axis = 3), droplet_spotting_images, axis = 3)
 
     channel_num, time_series_num, height, width = output_images.shape
     output_images = np.swapaxes(output_images, 0, 1)
